@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainScreen">
+
+    <fragment
+        android:id="@+id/photoList"
+        android:name="com.example.list3.PhotoListFragment"
+        android:label="Photo list"
+        tools:layout="@layout/fragment_take_photo" >
+    </fragment>
+    <fragment
+        android:id="@+id/takePhoto"
+        android:name="com.example.list3.TakePhotoFragment"
+        android:label="Take photo"
+        tools:layout="@layout/fragment_photo_list" />
+    <fragment
+        android:id="@+id/mainScreen"
+        android:name="com.example.list3.PrimaryFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_primary" >
+    </fragment>
+    <fragment
+        android:id="@+id/cameraxPreview"
+        android:name="com.example.list3.CameraXPreviewFragment"
+        android:label="CameraX Preview"
+        tools:layout="@layout/fragment_camerax_preview" />
+    <fragment
+        android:id="@+id/cameraxPhoto"
+        android:name="com.example.list3.CameraXPhotoFragment"
+        android:label="CameraX Take Photo"
+        tools:layout="@layout/fragment_camerax_photo" />
+</navigation>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:title="Main screen"
+            android:id="@+id/mainScreen">
+        </item>
+        <item
+            android:title="Photo list"
+            android:id="@+id/photoList">
+        </item>
+        <item
+            android:title="Take photo"
+            android:id="@+id/takePhoto"/>
+        <item
+            android:title="CameraX Preview"
+            android:id="@+id/cameraxPreview"/>
+        <item
+            android:title="CameraX Take Photo"
+            android:id="@+id/cameraxPhoto"/>
+    </group>
+</menu>
