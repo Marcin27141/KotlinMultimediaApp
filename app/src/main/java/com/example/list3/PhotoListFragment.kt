@@ -19,7 +19,11 @@ class PhotoListFragment : Fragment() {
         binding = FragmentPhotoListBinding.inflate(inflater, container, false)
 
         val dataRepo = DataRepo.getInstance(requireContext())
-        val adapter = dataRepo.getSharedList()?.let {
+        val imagesList = when(dataRepo.getStorage()) {
+            DataRepo.SHARED_STORAGE_ID -> dataRepo.getSharedList()
+            else -> dataRepo.getAppList()
+        }
+        val adapter = imagesList?.let {
             PhotoListAdapter(requireContext(), it)
         }
         if (adapter == null) {

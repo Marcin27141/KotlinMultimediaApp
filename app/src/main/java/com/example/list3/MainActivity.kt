@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val REQUEST_CODE = 313;
+    private val REQUEST_CODE = 313
     private val REQUIRED_PERMISSIONS = mutableListOf(
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO,
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.insideNavigationView
-        navView.itemIconTintList = null;
+        navView.itemIconTintList = null
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navContainer) as NavHostFragment
         val navController = navHostFragment.navController
 
@@ -78,8 +79,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //menuInflater.inflate(R.menu.app_menu, menu)
+        menuInflater.inflate(R.menu.app_menu, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.externalStorage -> {
+                val result = DataRepo.getInstance(this).setStorage(DataRepo.SHARED_STORAGE_ID)
+                if (result) {
+                    recreate()
+                    Toast.makeText(this, "Switched to shared storage", Toast.LENGTH_SHORT).show()
+                }
+                return result
+            }
+            R.id.privateStorage -> {
+                val result = DataRepo.getInstance(this).setStorage(DataRepo.APP_STORAGE_ID)
+                if (result) {
+                    recreate()
+                    Toast.makeText(this, "Switched to private app storage", Toast.LENGTH_SHORT).show()
+                }
+                return result
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

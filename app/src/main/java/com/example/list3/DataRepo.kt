@@ -4,10 +4,24 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import java.io.File
 
 class DataRepo {
     lateinit var uri : Uri
+
+    private var photo_storage = SHARED_STORAGE_ID
+
+    fun setStorage(storage: Int) : Boolean {
+        if (storage != SHARED_STORAGE_ID && storage != APP_STORAGE_ID)
+            return false
+        else photo_storage = storage
+        return true
+    }
+
+    fun getStorage(): Int = photo_storage
 
     fun getSharedList() : MutableList<DataItem>? {
         uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -30,6 +44,22 @@ class DataRepo {
         return sharedStoreList
     }
     fun getAppList(): MutableList<DataItem>? {
+        val dir: File? = ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        appStoreList?.clear()
+
+        if (dir?.isDirectory == true) {
+            var fileList = dir.listFiles()
+            if (fileList != null) {
+                for (file in fileList) {
+                    var fileName = file.name
+                    if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")
+                        || fileName.endsWith(".png") || fileName.endsWith(".gif")) {
+                        val tmpUri = FileProvider.getUriForFile(ctx, ctx.packageName + ".provider", file)
+                        appStoreList?.add(DataItem(fileName, file.toURI().path, file.absolutePath, tmpUri))
+                    }
+                }
+            }
+        }
         return appStoreList
     }
 
@@ -38,6 +68,9 @@ class DataRepo {
         private lateinit var ctx : Context
         var sharedStoreList: MutableList<DataItem>? = null
         var appStoreList: MutableList<DataItem>? = null
+
+        val SHARED_STORAGE_ID = 0
+        val APP_STORAGE_ID = 1
 
         fun getInstance(ctx: Context) : DataRepo {
             if (INSTANCE == null) {

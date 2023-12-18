@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.ContactsContract.Data
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +73,11 @@ class TakePhotoFragment : Fragment() {
 
     private fun getNewFileUri() : Uri {
         val timeStamp : String = SimpleDateFormat("yyyMMdd_HHmmss").format(Date())
-        val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        //val dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val dir = when(DataRepo.getInstance(requireContext()).getStorage()) {
+            DataRepo.SHARED_STORAGE_ID -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            else -> requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        }
         val tmpFile = File.createTempFile("Photo_" + timeStamp ,".jpg", dir)
         lastFile = tmpFile
         return FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".provider", tmpFile)
